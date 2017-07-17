@@ -24,7 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -43,8 +43,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <IncludePath>jpg;glut-3.6\glut-3.6\include;$(IncludePath)</IncludePath>
-    <LibraryPath>jpg;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Jeongmun Ji\Downloads\cs370\ogl-OpenGL-tutorial_0015_33\external\glm-0.9.7.1;C:\Users\Jeongmun Ji\Downloads\cs370\ogl-OpenGL-tutorial_0015_33\external\glfw-3.1.2\include\GLFW;glew-1.13.0\include;jpg;glut-3.6\glut-3.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Jeongmun Ji\Downloads\cs370\ogl-OpenGL-tutorial_0015_33\build\ext\src\Debug;C:\Users\Jeongmun Ji\Downloads\cs370\새 폴더\370_ImageProcessing_GL\solution\glew-1.13.0\bin\Debug\Win32;glew-1.13.0\lib\Debug\Win32;jpg;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
@@ -57,12 +57,12 @@
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OpenGL32.lib;GLu32.lib;glut32.lib;libjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;GLu32.lib;glut32.lib;libjpeg.lib;glew32d.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -88,7 +88,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\main.c" />
+    <ClCompile Include="..\main.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\shader.cpp" />
+    <ClCompile Include="..\texture.cpp" />
+    <ClCompile Include="..\tutorial02.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\shader.h" />
+    <ClInclude Include="..\texture.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,6 @@
+/solution/*.db
+*.tlog
+*.lastbuildstate
+*.idb
+*
+*.opendb

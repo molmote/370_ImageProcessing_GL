@@ -1,0 +1,4 @@
+﻿  glew.c
+     Creating library ..\..\lib\Debug\Win32\glew32d.lib and object ..\..\lib\Debug\Win32\glew32d.exp
+  glew_shared.vcxproj -> C:\Users\Jeongmun Ji\Downloads\cs370\새 폴더\370_ImageProcessing_GL\solution\glew-1.13.0\build\vc12\..\..\bin\Debug\Win32\glew32d.dll
+  glew_shared.vcxproj -> ..\..\bin\Debug\Win32\glew32d.pdb (Full PDB)
