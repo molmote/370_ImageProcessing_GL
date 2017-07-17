@@ -43,8 +43,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\Jeongmun Ji\Downloads\cs370\ogl-OpenGL-tutorial_0015_33\external\glm-0.9.7.1;C:\Users\Jeongmun Ji\Downloads\cs370\ogl-OpenGL-tutorial_0015_33\external\glfw-3.1.2\include\GLFW;glew-1.13.0\include;jpg;glut-3.6\glut-3.6\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Jeongmun Ji\Downloads\cs370\ogl-OpenGL-tutorial_0015_33\build\ext\src\Debug;C:\Users\Jeongmun Ji\Downloads\cs370\새 폴더\370_ImageProcessing_GL\solution\glew-1.13.0\bin\Debug\Win32;glew-1.13.0\lib\Debug\Win32;jpg;$(LibraryPath)</LibraryPath>
+    <IncludePath>glm-0.9.7.1;glfw-3.1.2\include\GLFW;glew-1.13.0\include;jpg;glut-3.6\glut-3.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>ext\src\Debug;glew-1.13.0\bin\Debug\Win32;glew-1.13.0\lib\Debug\Win32;jpg;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
