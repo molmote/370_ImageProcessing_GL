@@ -17,6 +17,24 @@ using namespace glm;
 #include "shader.h"
 #include "texture.hpp"
 
+#include <vector>
+
+int shaderIndex = 0;
+std::vector<GLuint> programIDs;
+GLuint programID;
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_E && action == GLFW_PRESS)
+	{
+		shaderIndex = (shaderIndex+1) % programIDs.size();
+
+		programID = programIDs[shaderIndex];
+	}
+
+		//activate_airship();
+}
+
 int main(void)
 {
 	// Initialise GLFW
@@ -64,8 +82,11 @@ int main(void)
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
-	GLuint programID = LoadShaders("TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader");
-	programID = LoadShaders("TransformVertexShader.vertexshader", "Gaussian.frag");
+	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader"));
+	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Invert.frag"));
+	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Gaussian.frag"));
+	programID = programIDs[0];
+
 
 	// Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
@@ -180,6 +201,8 @@ int main(void)
 	glGenBuffers(1, &uvbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
+	
+	glfwSetKeyCallback(window, key_callback);
 
 	do {
 
@@ -234,6 +257,7 @@ int main(void)
 		glfwPollEvents();
 
 	} // Check if the ESC key was pressed or the window was closed
+
 	while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 		glfwWindowShouldClose(window) == 0);
 

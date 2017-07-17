@@ -13,7 +13,4 @@ void main(){
 
 	// Output color = color of the texture at the specified UV
 	color = texture( myTextureSampler, UV ).rgb;
-
-	// inverse fragment shader
-	color = vec3( 1.0 -color.r, 1.0 -color.g, 1.0 -color.b);
 }
