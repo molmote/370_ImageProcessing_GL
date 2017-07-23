@@ -23,16 +23,216 @@ int shaderIndex = 0;
 std::vector<GLuint> programIDs;
 GLuint programID;
 
+static const GLfloat g_vertex_buffer_data[] = {
+	-1.0f,-1.0f,-1.0f,
+	-1.0f,-1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	1.0f, 1.0f,-1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f, 1.0f,-1.0f,
+	1.0f,-1.0f, 1.0f,
+	-1.0f,-1.0f,-1.0f,
+	1.0f,-1.0f,-1.0f,
+	1.0f, 1.0f,-1.0f,
+	1.0f,-1.0f,-1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f,-1.0f,
+	1.0f,-1.0f, 1.0f,
+	-1.0f,-1.0f, 1.0f,
+	-1.0f,-1.0f,-1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f,-1.0f, 1.0f,
+	1.0f,-1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f,-1.0f,-1.0f,
+	1.0f, 1.0f,-1.0f,
+	1.0f,-1.0f,-1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f,-1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	1.0f, 1.0f,-1.0f,
+	-1.0f, 1.0f,-1.0f,
+	1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f,-1.0f,
+	-1.0f, 1.0f, 1.0f,
+	1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	1.0f,-1.0f, 1.0f
+};
+
+// Two UV coordinatesfor each vertex. They were created withe Blender.
+static const GLfloat g_uv_buffer_data[] = {
+	0.000059f, 1.0f - 0.000004f,
+	0.000103f, 1.0f - 0.336048f,
+	0.335973f, 1.0f - 0.335903f,
+	1.000023f, 1.0f - 0.000013f,
+	0.667979f, 1.0f - 0.335851f,
+	0.999958f, 1.0f - 0.336064f,
+	0.667979f, 1.0f - 0.335851f,
+	0.336024f, 1.0f - 0.671877f,
+	0.667969f, 1.0f - 0.671889f,
+	1.000023f, 1.0f - 0.000013f,
+	0.668104f, 1.0f - 0.000013f,
+	0.667979f, 1.0f - 0.335851f,
+	0.000059f, 1.0f - 0.000004f,
+	0.335973f, 1.0f - 0.335903f,
+	0.336098f, 1.0f - 0.000071f,
+	0.667979f, 1.0f - 0.335851f,
+	0.335973f, 1.0f - 0.335903f,
+	0.336024f, 1.0f - 0.671877f,
+	1.000004f, 1.0f - 0.671847f,
+	0.999958f, 1.0f - 0.336064f,
+	0.667979f, 1.0f - 0.335851f,
+	0.668104f, 1.0f - 0.000013f,
+	0.335973f, 1.0f - 0.335903f,
+	0.667979f, 1.0f - 0.335851f,
+	0.335973f, 1.0f - 0.335903f,
+	0.668104f, 1.0f - 0.000013f,
+	0.336098f, 1.0f - 0.000071f,
+	0.000103f, 1.0f - 0.336048f,
+	0.000004f, 1.0f - 0.671870f,
+	0.336024f, 1.0f - 0.671877f,
+	0.000103f, 1.0f - 0.336048f,
+	0.336024f, 1.0f - 0.671877f,
+	0.335973f, 1.0f - 0.335903f,
+	0.667969f, 1.0f - 0.671889f,
+	1.000004f, 1.0f - 0.671847f,
+	0.667979f, 1.0f - 0.335851f
+};
+
+
+enum flag
+{
+	UniformBlur = 1,
+	DepthOfField = 2,
+	Bloom = 4,
+	AdditiveNoise = 8,
+	RGB2HSV = 16,
+	ScratchedFilm = 32,
+	ToneChange = 64,
+	HueChange = 128
+};
+
+int shaderflag = 0;
+GLuint flagID;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_E && action == GLFW_PRESS)
+	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
+	{
+		//programID = programIDs[0];
+		int res = shaderflag & flag::UniformBlur;
+		if ( res != flag::UniformBlur)
+		{
+			shaderflag += flag::UniformBlur;
+		}
+		else
+		{
+			shaderflag -= flag::UniformBlur;
+		}
+
+		//shaderflag += (shaderflag & flag::UniformBlur);
+	}
+
+	if (key == GLFW_KEY_W && action == GLFW_PRESS)
+	{
+		shaderflag & flag::DepthOfField != flag::DepthOfField ?
+			shaderflag += flag::DepthOfField : shaderflag -= flag::DepthOfField;
+	}
+
+	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
 	{
 		shaderIndex = (shaderIndex+1) % programIDs.size();
 
 		programID = programIDs[shaderIndex];
 	}
 
+
+	glUniform1i(flagID, shaderflag);
 		//activate_airship();
+}
+unsigned int colorBuffers[2];
+
+unsigned int pingpongFBO[2];
+unsigned int pingpongBuffer[2];
+void SetUpBlur(int SCR_WIDTH, int SCR_HEIGHT)
+{
+	// set up floating point framebuffer to render scene to
+	unsigned int hdrFBO;
+	glGenFramebuffers(1, &hdrFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	glGenTextures(2, colorBuffers);
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		glBindTexture(GL_TEXTURE_2D, colorBuffers[i]);
+		glTexImage2D(
+			GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL
+		);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		// attach texture to framebuffer
+		glFramebufferTexture2D(
+			GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, colorBuffers[i], 0
+		);
+	}
+
+	glGenFramebuffers(2, pingpongFBO);
+	glGenTextures(2, pingpongBuffer);
+	for (unsigned int i = 0; i < 2; i++)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
+		glBindTexture(GL_TEXTURE_2D, pingpongBuffer[i]);
+		glTexImage2D(
+			GL_TEXTURE_2D, 0, GL_RGB16F, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_FLOAT, NULL
+		);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glFramebufferTexture2D(
+			GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pingpongBuffer[i], 0
+		);
+	}
+}
+
+void RenderQuad()
+{
+	GLuint vertexbuffer;
+	glGenBuffers(1, &vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	GLuint uvbuffer;
+	glGenBuffers(1, &uvbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
+
+}
+
+void Blur(int amount, GLuint shaderBlur)
+{
+	bool horizontal = true, first_iteration = true;
+	// int amount = 10;
+	// shaderBlur.use();
+	glUseProgram(shaderBlur);
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
+		// shaderBlur.setInt("horizontal", horizontal);
+		glUniform1i(glGetUniformLocation(shaderBlur, "horizontal"), horizontal);
+		
+		glBindTexture(
+			GL_TEXTURE_2D, first_iteration ? colorBuffers[1] : pingpongBuffer[!horizontal]
+		);
+		//RenderQuad();
+		horizontal = !horizontal;
+		if (first_iteration)
+			first_iteration = false;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 int main(void)
@@ -83,10 +283,12 @@ int main(void)
 
 	// Create and compile our GLSL program from the shaders
 	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader"));
-	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Invert.frag"));
-	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Gaussian.frag"));
+	//programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Invert.frag"));
+	//programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Convolution.frag"));
+	//programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Gaussian.frag"));
 	programID = programIDs[0];
 
+	// glAttachShader( )
 
 	// Get a handle for our "MVP" uniform
 	GLuint MatrixID = glGetUniformLocation(programID, "MVP");
@@ -110,88 +312,11 @@ int main(void)
 
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
+	flagID = glGetUniformLocation(programID, "shaderflag");
 
 	// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
 	// A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
-	static const GLfloat g_vertex_buffer_data[] = {
-		-1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		-1.0f,-1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		-1.0f,-1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f,-1.0f,
-		1.0f,-1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f,-1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f,-1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
-		1.0f,-1.0f, 1.0f
-	};
-
-	// Two UV coordinatesfor each vertex. They were created withe Blender.
-	static const GLfloat g_uv_buffer_data[] = {
-		0.000059f, 1.0f - 0.000004f,
-		0.000103f, 1.0f - 0.336048f,
-		0.335973f, 1.0f - 0.335903f,
-		1.000023f, 1.0f - 0.000013f,
-		0.667979f, 1.0f - 0.335851f,
-		0.999958f, 1.0f - 0.336064f,
-		0.667979f, 1.0f - 0.335851f,
-		0.336024f, 1.0f - 0.671877f,
-		0.667969f, 1.0f - 0.671889f,
-		1.000023f, 1.0f - 0.000013f,
-		0.668104f, 1.0f - 0.000013f,
-		0.667979f, 1.0f - 0.335851f,
-		0.000059f, 1.0f - 0.000004f,
-		0.335973f, 1.0f - 0.335903f,
-		0.336098f, 1.0f - 0.000071f,
-		0.667979f, 1.0f - 0.335851f,
-		0.335973f, 1.0f - 0.335903f,
-		0.336024f, 1.0f - 0.671877f,
-		1.000004f, 1.0f - 0.671847f,
-		0.999958f, 1.0f - 0.336064f,
-		0.667979f, 1.0f - 0.335851f,
-		0.668104f, 1.0f - 0.000013f,
-		0.335973f, 1.0f - 0.335903f,
-		0.667979f, 1.0f - 0.335851f,
-		0.335973f, 1.0f - 0.335903f,
-		0.668104f, 1.0f - 0.000013f,
-		0.336098f, 1.0f - 0.000071f,
-		0.000103f, 1.0f - 0.336048f,
-		0.000004f, 1.0f - 0.671870f,
-		0.336024f, 1.0f - 0.671877f,
-		0.000103f, 1.0f - 0.336048f,
-		0.336024f, 1.0f - 0.671877f,
-		0.335973f, 1.0f - 0.335903f,
-		0.667969f, 1.0f - 0.671889f,
-		1.000004f, 1.0f - 0.671847f,
-		0.667979f, 1.0f - 0.335851f
-	};
-
+	
 	GLuint vertexbuffer;
 	glGenBuffers(1, &vertexbuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
@@ -203,6 +328,7 @@ int main(void)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_uv_buffer_data), g_uv_buffer_data, GL_STATIC_DRAW);
 	
 	glfwSetKeyCallback(window, key_callback);
+
 
 	do {
 
@@ -221,6 +347,8 @@ int main(void)
 		glBindTexture(GL_TEXTURE_2D, Texture);
 		// Set our "myTextureSampler" sampler to user Texture Unit 0
 		glUniform1i(TextureID, 0);
+		glUniform1i(flagID, shaderflag);
+			// GLuint flagID = glGetUniformLocation(programID, "shaderflag"); , 0);
 
 		// 1rst attribute buffer : vertices
 		glEnableVertexAttribArray(0);
@@ -252,9 +380,15 @@ int main(void)
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 
+		//SetUpBlur(640, 480);
+		//Blur(10, programIDs[2]);
 		// Swap buffers
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+
+
+
 
 	} // Check if the ESC key was pressed or the window was closed
 
