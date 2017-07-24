@@ -102,6 +102,7 @@ static const GLfloat g_uv_buffer_data[] = {
 	0.667979f, 1.0f - 0.335851f
 };
 
+float dt = 0;
 
 enum flag
 {
@@ -117,6 +118,7 @@ enum flag
 
 int shaderflag = 0;
 GLuint flagID;
+GLuint timeID;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS)
@@ -137,8 +139,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_W && action == GLFW_PRESS)
 	{
-		shaderflag & flag::DepthOfField != flag::DepthOfField ?
+		(shaderflag & flag::DepthOfField) != flag::DepthOfField ?
 			shaderflag += flag::DepthOfField : shaderflag -= flag::DepthOfField;
+	}
+
+	if (key == GLFW_KEY_E && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::Bloom) != flag::Bloom ?
+			shaderflag += flag::Bloom : shaderflag -= flag::Bloom;
+	}
+
+	if (key == GLFW_KEY_R && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::AdditiveNoise) != flag::AdditiveNoise ?
+			shaderflag += flag::AdditiveNoise : shaderflag -= flag::AdditiveNoise;
 	}
 
 	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
@@ -282,7 +296,7 @@ int main(void)
 	glBindVertexArray(VertexArrayID);
 
 	// Create and compile our GLSL program from the shaders
-	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "TextureFragmentShader.fragmentshader"));
+	programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "TextureFragmentShader.cs"));
 	//programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Invert.frag"));
 	//programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Convolution.frag"));
 	//programIDs.push_back(LoadShaders("TransformVertexShader.vertexshader", "Gaussian.frag"));
@@ -313,6 +327,8 @@ int main(void)
 	// Get a handle for our "myTextureSampler" uniform
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 	flagID = glGetUniformLocation(programID, "shaderflag");
+	timeID = glGetUniformLocation(programID, "TIME");
+	glUniform1i(timeID, dt);
 
 	// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
 	// A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
@@ -386,7 +402,7 @@ int main(void)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
-
+		dt += 0.1f;
 
 
 
