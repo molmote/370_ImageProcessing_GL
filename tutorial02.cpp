@@ -113,7 +113,8 @@ enum flag
 	RGB2HSV = 16,
 	ScratchedFilm = 32,
 	ToneChange = 64,
-	HueChange = 128
+	HueChange = 128,
+	HalfTone = 256,
 };
 
 int shaderflag = 0;
@@ -153,6 +154,36 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	{
 		(shaderflag & flag::AdditiveNoise) != flag::AdditiveNoise ?
 			shaderflag += flag::AdditiveNoise : shaderflag -= flag::AdditiveNoise;
+	}
+
+	if (key == GLFW_KEY_A && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::RGB2HSV) != flag::RGB2HSV ?
+			shaderflag += flag::RGB2HSV : shaderflag -= flag::RGB2HSV;
+	}
+
+	if (key == GLFW_KEY_S && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::ScratchedFilm) != flag::ScratchedFilm ?
+			shaderflag += flag::ScratchedFilm : shaderflag -= flag::ScratchedFilm;
+	}
+
+	if (key == GLFW_KEY_D && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::ToneChange) != flag::ToneChange ?
+			shaderflag += flag::ToneChange : shaderflag -= flag::ToneChange;
+	}
+
+	if (key == GLFW_KEY_F && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::HueChange) != flag::HueChange ?
+			shaderflag += flag::HueChange : shaderflag -= flag::HueChange;
+	}
+
+	if (key == GLFW_KEY_Z && action == GLFW_PRESS)
+	{
+		(shaderflag & flag::HalfTone) != flag::HalfTone ?
+			shaderflag += flag::HalfTone : shaderflag -= flag::HalfTone;
 	}
 
 	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
@@ -328,7 +359,13 @@ int main(void)
 	GLuint TextureID = glGetUniformLocation(programID, "myTextureSampler");
 	flagID = glGetUniformLocation(programID, "shaderflag");
 	timeID = glGetUniformLocation(programID, "TIME");
+	GLuint resID = glGetUniformLocation(programID, "res");
 	glUniform1i(timeID, dt);
+
+	GLint m_viewport[4];
+	glGetIntegerv(GL_VIEWPORT, m_viewport);
+
+	glUniform2i(resID, m_viewport[2], m_viewport[3]);
 
 	// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
 	// A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices

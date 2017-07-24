@@ -9,54 +9,11 @@ out vec4 FragmentColor;
 
 // Values that stay constant for the whole mesh.
 uniform sampler2D myTextureSampler;
+   uniform vec2 res;
 uniform int shaderflag;
 uniform float TIME;
 float sum = 0;
 
-float sigma = 3;     // The sigma value for the gaussian function: higher value means more blur
-                         // A good value for 9x9 is around 3 to 5
-                         // A good value for 7x7 is around 2.5 to 4
-                         // A good value for 5x5 is around 2 to 3.5
-                         // ... play around with this based on what you need :)
-
-float blurSize = 1.0f / 640;  // This should usually be equal to
-                         // 1.0f / texture_pixel_width for a horizontal blur, and
-                         // 1.0f / texture_pixel_height for a vertical blur.
-
-// uniform sampler2D blurSampler;  // Texture that will be blurred by this shader
-
-const float pi = 3.14159265f;
-
-#define BLUR_5 0;
-
-// The following are all mutually exclusive macros for various 
-// seperable blurs of varying kernel size
-#if defined(VERTICAL_BLUR_9)
-const float numBlurPixelsPerSide = 4.0f;
-const vec2  blurMultiplyVec      = vec2(0.0f, 1.0f);
-#elif defined(HORIZONTAL_BLUR_9)
-const float numBlurPixelsPerSide = 4.0f;
-const vec2  blurMultiplyVec      = vec2(1.0f, 0.0f);
-#elif defined(VERTICAL_BLUR_7)
-const float numBlurPixelsPerSide = 3.0f;
-const vec2  blurMultiplyVec      = vec2(0.0f, 1.0f);
-#elif defined(HORIZONTAL_BLUR_7)
-const float numBlurPixelsPerSide = 3.0f;
-const vec2  blurMultiplyVec      = vec2(1.0f, 0.0f);
-#elif defined(VERTICAL_BLUR_5)
-const float numBlurPixelsPerSide = 2.0f;
-const vec2  blurMultiplyVec      = vec2(0.0f, 1.0f);
-#elif defined(HORIZONTAL_BLUR_5)
-const float numBlurPixelsPerSide = 2.0f;
-const vec2  blurMultiplyVec      = vec2(1.0f, 0.0f);
-#elif defined(BLUR_5)
-const float numBlurPixelsPerSide = 2.0f;
-const vec2  blurMultiplyVec      = vec2(1.0f, 1.0f);
-#else
-// This only exists to get this shader to compile when no macros are defined
-const float numBlurPixelsPerSide = 0.0f;
-const vec2 blurMultiplyVec = vec2(0.0f, 0.0f);
-#endif
 
 highp float rand(float n){
     return fract(sin(mod(dot(n ,12.9898),3.14))*43758.5453);
@@ -93,6 +50,120 @@ float random( vec2  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
 float random( vec3  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
 float random( vec4  v ) { return floatConstruct(hash(floatBitsToUint(v))); }
 
+float sigma = 3;     // The sigma value for the gaussian function: higher value means more blur
+                     // A good value for 9x9 is around 3 to 5
+                     // A good value for 7x7 is around 2.5 to 4
+                     // A good value for 5x5 is around 2 to 3.5
+                     // ... play around with this based on what you need :)
+
+
+
+const float pi = 3.14159265f;
+float blurSize = 1.0f / 640;  // This should usually be equal to
+                              // 1.0f / texture_pixel_width for a horizontal blur, and
+                              // 1.0f / texture_pixel_height for a vertical blur.
+vec4 Blur(int size)
+{
+    float numBlurPixelsPerSide = size - 1;
+    vec2 blurMultiplyVec = vec2(1.0f, 1.0f);
+
+    // Incremental Gaussian Coefficent Calculation (See GPU Gems 3 pp. 877 - 889)
+    vec3 incrementalGaussian;
+    incrementalGaussian.x = 1.0f / (sqrt(2.0f * pi) * sigma);
+    incrementalGaussian.y = exp(-0.5f / (sigma * sigma));
+    incrementalGaussian.z = incrementalGaussian.y * incrementalGaussian.y;
+
+    vec4 avgValue = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+    float coefficientSum = 0.0f;
+
+    // Take the central sample first...
+    avgValue += texture(myTextureSampler, UV) * incrementalGaussian.x;
+    coefficientSum += incrementalGaussian.x;
+    incrementalGaussian.xy *= incrementalGaussian.yz;
+
+    // Go through the remaining 8 vertical samples (4 on each side of the center)
+    for (float i = 1.0f; i <= numBlurPixelsPerSide; i++)
+    {
+        avgValue += texture(myTextureSampler, UV - i * blurSize *
+                              blurMultiplyVec) * incrementalGaussian.x;
+        avgValue += texture(myTextureSampler, UV + i * blurSize *
+                              blurMultiplyVec) * incrementalGaussian.x;
+        coefficientSum += 2 * incrementalGaussian.x;
+        incrementalGaussian.xy *= incrementalGaussian.yz;
+    }
+
+    return avgValue / coefficientSum;
+}
+
+float aastep(float threshold, float value)
+{
+#ifdef GL_OES_standard_derivatives
+    float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+    float afwidth = frequency * (1.0 / 200.0) / uScale / cos(uYrot);
+#endif
+    return smoothstep(threshold - afwidth, threshold + afwidth, value);
+}
+
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+// vec3 texcolor = texture2D_bilinear(myTextureSampler, UV, res, vOne).rgb;
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one)
+{
+    vec2 uv = st * dims;
+    vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+    vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+    vec2 st00 = (uv00 + vec2(0.5)) * one;
+    vec4 texel00 = texture(tex, st00);
+    vec4 texel10 = texture(tex, st00 + vec2(one.x, 0.0));
+    vec4 texel01 = texture(tex, st00 + vec2(0.0, one.y));
+    vec4 texel11 = texture(tex, st00 + one);
+    vec4 texel0 = mix(texel00, texel01, uvlerp.y);
+    vec4 texel1 = mix(texel10, texel11, uvlerp.y);
+    return mix(texel0, texel1, uvlerp.x);
+}
+
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289(((x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v)
+{
+    const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                        0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                       -0.577350269189626,  // -1.0 + 2.0 * C.x
+                        0.024390243902439); // 1.0 / 41.0
+                                            // First corner
+    vec2 i = floor(v + dot(v, C.yy));
+    vec2 x0 = v - i + dot(i, C.xx);
+    // Other corners
+    vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+    vec4 x12 = x0.xyxy + C.xxzz;
+    x12.xy -= i1;
+    // Permutations
+    i = mod289(i); // Avoid truncation effects in permutation
+    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0))
+                             + i.x + vec3(0.0, i1.x, 1.0));
+    vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy),
+                            dot(x12.zw, x12.zw)), 0.0);
+    m = m * m; m = m * m;
+    // Gradients
+    vec3 x = 2.0 * fract(p * C.www) - 1.0;
+    vec3 h = abs(x) - 0.5;
+    vec3 a0 = x - floor(x + 0.5);
+    // Normalise gradients implicitly by scaling m
+    m *= 1.792843 - 0.853735 * (a0 * a0 + h * h);
+    // Compute final noise value at P
+    vec3 g;
+    g.x = a0.x * x0.x + h.x * x0.y;
+    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+    return 130.0 * dot(m, g);
+}
+
 void main(){
 
 	// Output color = color of the texture at the specified UV
@@ -106,47 +177,15 @@ void main(){
     // Uniform Blur
     if ((shaderflag & int(1)) == int(1))
     {
-        FragmentColor = texture(myTextureSampler, vec2(gl_FragCoord) / 1024.0) * weight[0];
-        for (int i = 1; i < 5; i++)
-        {
-            FragmentColor +=
-                texture(myTextureSampler, (vec2(gl_FragCoord) + vec2(0.0, offset[i])) / 1024.0)
-                    * weight[i];
-            FragmentColor +=
-                texture(myTextureSampler, (vec2(gl_FragCoord) - vec2(0.0, offset[i])) / 1024.0)
-                    * weight[i];
-        }
+        FragmentColor = Blur(2);
     }
 
-
+    // Bloom or Glow effect
     if ((shaderflag & int(4)) == int(4))
     {
-        // Incremental Gaussian Coefficent Calculation (See GPU Gems 3 pp. 877 - 889)
-        vec3 incrementalGaussian;
-        incrementalGaussian.x = 1.0f / (sqrt(2.0f * pi) * sigma);
-        incrementalGaussian.y = exp(-0.5f / (sigma * sigma));
-        incrementalGaussian.z = incrementalGaussian.y * incrementalGaussian.y;
-
-        vec4 avgValue = vec4(0.0f, 0.0f, 0.0f, 0.0f);
-        float coefficientSum = 0.0f;
-
-        // Take the central sample first...
-        avgValue += texture(myTextureSampler, UV) * incrementalGaussian.x;
-        coefficientSum += incrementalGaussian.x;
-        incrementalGaussian.xy *= incrementalGaussian.yz;
-
-        // Go through the remaining 8 vertical samples (4 on each side of the center)
-        for (float i = 1.0f; i <= numBlurPixelsPerSide; i++)
-        {
-            avgValue += texture(myTextureSampler, UV - i * blurSize *
-                                  blurMultiplyVec) * incrementalGaussian.x;
-            avgValue += texture(myTextureSampler, UV + i * blurSize *
-                                  blurMultiplyVec) * incrementalGaussian.x;
-            coefficientSum += 2 * incrementalGaussian.x;
-            incrementalGaussian.xy *= incrementalGaussian.yz;
-        }
-
-        FragmentColor = avgValue / coefficientSum;
+        FragmentColor += Blur(21);
+        FragmentColor += Blur(7);
+        FragmentColor += Blur(3);
     }
 
 
@@ -159,6 +198,73 @@ void main(){
         FragmentColor= FragmentColor+vec4(luma, e);
     }
 
+    //varying 
+    // RGB TO HSV
+    if ((shaderflag & int(16)) == int(16))
+    {
+    }
+
+
+    // Scratched Fild Effect
+    if ((shaderflag & int(32)) == int(32))
+    {
+    }
+
+    // Tone Change
+    if ((shaderflag & int(64)) == int(64))
+    {
+    }
+
+    // Hue Change
+    // for this one I Need another key for sepia / Black&White / Gray scale toggle
+    if ((shaderflag & int(128)) == int(128))
+    {
+    }
+
+    
+    /*uniform */
+    float uScale = 10; // For imperfect, isotropic anti-aliasing in
+                      /*uniform */
+    float uYrot = 10;  // absence of dFdx() and dFdy() functions
+    float frequency = 40.0; // Needed globally for lame version of aastep()
+
+    // HalfTone
+    if ((shaderflag & int(256)) == int(256))
+    {
+        vec3 texcolor = texture(myTextureSampler, UV).rgb; // Unrotated coords
+
+        float n = 0.1 * snoise(UV * 200.0); // Fractal noise
+        n += 0.05 * snoise(UV * 400.0);
+        n += 0.025 * snoise(UV * 800.0);
+        vec3 white = vec3(n * 0.2 + 0.97);
+        vec3 black = vec3(n + 0.1);
+
+        // Perform a rough RGB-to-CMYK conversion
+        vec4 cmyk;
+        cmyk.xyz = 1.0 - texcolor;
+        cmyk.w = min(cmyk.x, min(cmyk.y, cmyk.z)); // Create K
+        cmyk.xyz -= cmyk.w; // Subtract K equivalent from CMY
+
+        // Distance to nearest point in a grid of
+        // (frequency x frequency) points over the unit square
+        vec2 Kst = frequency * mat2(0.707, -0.707, 0.707, 0.707) * UV;
+        vec2 Kuv = 2.0 * fract(Kst) - 1.0;
+        float k = aastep(0.0, sqrt(cmyk.w) - length(Kuv) + n);
+        vec2 Cst = frequency * mat2(0.966, -0.259, 0.259, 0.966) * UV;
+        vec2 Cuv = 2.0 * fract(Cst) - 1.0;
+        float c = aastep(0.0, sqrt(cmyk.x) - length(Cuv) + n);
+        vec2 Mst = frequency * mat2(0.966, 0.259, -0.259, 0.966) * UV;
+        vec2 Muv = 2.0 * fract(Mst) - 1.0;
+        float m = aastep(0.0, sqrt(cmyk.y) - length(Muv) + n);
+        vec2 Yst = frequency * UV; // 0 deg
+        vec2 Yuv = 2.0 * fract(Yst) - 1.0;
+        float y = aastep(0.0, sqrt(cmyk.z) - length(Yuv) + n);
+
+        vec3 rgbscreen = 1.0 - 0.9 * vec3(c, m, y) + n;
+        rgbscreen = mix(rgbscreen, black, 0.85 * k + 0.3 * n);
+
+        FragmentColor = vec4(rgbscreen, 1.0);
+    }
 
     // Depth Of Field
     if ((shaderflag & int(2)) == int(2))
