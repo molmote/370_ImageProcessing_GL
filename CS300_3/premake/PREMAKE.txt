@@ -1,0 +1,9 @@
+You should not have to worry much about using premake. Simply run build.bat to
+generate a Visual Studio solution. You can build and run the project from within
+Visual Studio. Before submitting, run clean.bat to cleanup any build artifacts.
+Please do not include the premake folder when you are creating your Zip file to
+submit on Moodle; it is not necessary. If you changed your premake script for
+whatever reason, feel free to then include the Lua file, but not the rest of
+Premake. Please leave a remark in your README.txt explaining what you changed
+and why. Also, please do not include the sample folder when creating your
+archive.
