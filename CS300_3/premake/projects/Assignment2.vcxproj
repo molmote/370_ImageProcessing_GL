@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseSymbols|Win32">
+      <Configuration>ReleaseSymbols</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BF51AB14-0E62-3D41-B16C-4A51057A9111}</ProjectGuid>
+    <RootNamespace>Assignment2</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>Assignment3</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseSymbols|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseSymbols|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>..\..\bin\debug\</OutDir>
+    <IntDir>obj\Debug\</IntDir>
+    <TargetName>assignment2</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseSymbols|Win32'">
+    <OutDir>..\..\bin\release\</OutDir>
+    <IntDir>obj\ReleaseSymbols\</IntDir>
+    <TargetName>assignment2</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\bin\release\</OutDir>
+    <IntDir>obj\Release\</IntDir>
+    <TargetName>assignment2</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)assignment2.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;ImGuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)assignment2.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\dep\FreeGLUT;..\..\dep\GLEW;..\..\dep\ImGui;..\..\dep\STB;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\debug\
+copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\debug\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseSymbols|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)assignment2.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;ImGui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)assignment2.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\dep\FreeGLUT;..\..\dep\GLEW;..\..\dep\ImGui;..\..\dep\STB;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\release\
+copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;ImGui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)assignment2.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\..\dep\FreeGLUT;..\..\dep\GLEW;..\..\dep\ImGui;..\..\dep\STB;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\release\
+copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\inc\Precompiled.h" />
+    <ClInclude Include="..\..\inc\RenderObject.h" />
+    <ClInclude Include="..\..\inc\framework\Application.h" />
+    <ClInclude Include="..\..\inc\framework\Debug.h" />
+    <ClInclude Include="..\..\inc\framework\ImGuiImpl.h" />
+    <ClInclude Include="..\..\inc\framework\Utilities.h" />
+    <ClInclude Include="..\..\inc\graphics\Buffer.h" />
+    <ClInclude Include="..\..\inc\graphics\Color.h" />
+    <ClInclude Include="..\..\inc\graphics\IndexBufferObject.h" />
+    <ClInclude Include="..\..\inc\graphics\Light.h" />
+    <ClInclude Include="..\..\inc\graphics\MeshLoader.h" />
+    <ClInclude Include="..\..\inc\graphics\ShaderManager.h" />
+    <ClInclude Include="..\..\inc\graphics\ShaderProgram.h" />
+    <ClInclude Include="..\..\inc\graphics\Texture.h" />
+    <ClInclude Include="..\..\inc\graphics\TextureManager.h" />
+    <ClInclude Include="..\..\inc\graphics\Topology.h" />
+    <ClInclude Include="..\..\inc\graphics\TriangleMesh.h" />
+    <ClInclude Include="..\..\inc\graphics\Vertex.h" />
+    <ClInclude Include="..\..\inc\graphics\VertexArrayObject.h" />
+    <ClInclude Include="..\..\inc\graphics\VertexBufferObject.h" />
+    <ClInclude Include="..\..\inc\math\EulerAngles.h" />
+    <ClInclude Include="..\..\inc\math\EulerOrder.h" />
+    <ClInclude Include="..\..\inc\math\Math.h" />
+    <ClInclude Include="..\..\inc\math\MathFunctions.h" />
+    <ClInclude Include="..\..\inc\math\Matrix2.h" />
+    <ClInclude Include="..\..\inc\math\Matrix3.h" />
+    <ClInclude Include="..\..\inc\math\Matrix4.h" />
+    <ClInclude Include="..\..\inc\math\MatrixStorage.h" />
+    <ClInclude Include="..\..\inc\math\Quaternion.h" />
+    <ClInclude Include="..\..\inc\math\Reals.h" />
+    <ClInclude Include="..\..\inc\math\Vector2.h" />
+    <ClInclude Include="..\..\inc\math\Vector3.h" />
+    <ClInclude Include="..\..\inc\math\Vector4.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Main.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\Precompiled.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='ReleaseSymbols|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RenderObject.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\Application.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\Debug.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\ImGuiImpl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Color.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\IndexBufferObject.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Light.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\MeshLoader.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\ShaderManager.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\ShaderProgram.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Texture.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\TextureManager.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\TriangleMesh.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\VertexArrayObject.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\VertexBufferObject.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\EulerAngles.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\EulerOrder.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\MathFunctions.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix3.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix4.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Quaternion.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Reals.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector2.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector3.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector4.cpp">
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="inc">
+      <UniqueIdentifier>{9D21D16A-BF47-0E4C-B4C0-FD186D9702E1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\framework">
+      <UniqueIdentifier>{842E9CE9-2922-F04C-B84B-BDFE1E76927D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\graphics">
+      <UniqueIdentifier>{5C4B9411-4BF9-C442-A4C8-55D97BD0834C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\math">
+      <UniqueIdentifier>{8BE23973-AF69-5D4A-A2CB-FCD90CF26EDF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4BBA3151-B738-9440-946C-E0B84E99C16E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\framework">
+      <UniqueIdentifier>{7F64AE02-B4F2-994F-9ABF-75B895CFD8F7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\graphics">
+      <UniqueIdentifier>{7B292525-729D-0C4E-88EB-261A3A5AEFF5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\math">
+      <UniqueIdentifier>{38F99744-7920-CE42-BCA4-ED5460797569}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\inc\Precompiled.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\RenderObject.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\framework\Application.h">
+      <Filter>inc\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\framework\Debug.h">
+      <Filter>inc\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\framework\ImGuiImpl.h">
+      <Filter>inc\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\framework\Utilities.h">
+      <Filter>inc\framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\Buffer.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\Color.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\IndexBufferObject.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\Light.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\MeshLoader.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\ShaderManager.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\ShaderProgram.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\Texture.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\TextureManager.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\Topology.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\TriangleMesh.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\Vertex.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\VertexArrayObject.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\graphics\VertexBufferObject.h">
+      <Filter>inc\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\EulerAngles.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\EulerOrder.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Math.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\MathFunctions.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Matrix2.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Matrix3.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Matrix4.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\MatrixStorage.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Quaternion.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Reals.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Vector2.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Vector3.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\inc\math\Vector4.h">
+      <Filter>inc\math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Precompiled.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RenderObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\Application.cpp">
+      <Filter>src\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\Debug.cpp">
+      <Filter>src\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\framework\ImGuiImpl.cpp">
+      <Filter>src\framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Color.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\IndexBufferObject.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Light.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\MeshLoader.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\ShaderManager.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\ShaderProgram.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\Texture.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\TextureManager.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\TriangleMesh.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\VertexArrayObject.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\graphics\VertexBufferObject.cpp">
+      <Filter>src\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\EulerAngles.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\EulerOrder.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\MathFunctions.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix2.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix3.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Matrix4.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Quaternion.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Reals.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector2.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector3.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\math\Vector4.cpp">
+      <Filter>src\math</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
