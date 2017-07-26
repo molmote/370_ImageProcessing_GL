@@ -93,7 +93,6 @@ static Vector3 cameraEye;
 static Vector3 cameraTarget;
 static Vector3 cameraUp;
 static Vector3 cameraMovement;
-static Vector3 cameraTargetMovement;
 static Vector3 RecordStartPos;
 static bool ScreenShot = false;
 static bool bCameraRecord= false;
@@ -611,7 +610,6 @@ void getKeyInput(unsigned char key, int xmouse, int ymouse)
 		}
 		timer = 0;
 		cameraMovement = Vector3(0.5f, 0.f, 0.0f);
-		//cameraTargetMovement = Vector3(0.5f, 0.f, 0.0f);
 	}
 	if (key == 'k')
 	{//backword
@@ -633,12 +631,10 @@ void getKeyInput(unsigned char key, int xmouse, int ymouse)
 		}
 		timer = 0;
 		cameraMovement = Vector3(-0.5f, 0.f, 0.0f);
-		//cameraTargetMovement = Vector3(-0.5f, 0.f, 0.0f);
 	}
 	if (key == ' ')
 	{// stop camera movement with stop record if it plays
 		cameraMovement = Vector3(0.f, 0.f, 0.0f);
-//		cameraTargetMovement = Vector3(0.f, 0.f, 0.0f);
 		bCameraRecord = false;
 		timer = 0;
 	}
@@ -656,8 +652,6 @@ void getKeyInput(unsigned char key, int xmouse, int ymouse)
 	{// play Carmera record
 		bCameraRecord = false;
 		timer = 0;
-	//	ScreenShot = true;
-	//	();
 		bPlayRecord = true;
 		cameraEye = RecordStartPos;
 	}
@@ -688,7 +682,6 @@ void Initialize(Application *application, void *udata)
 	cameraTarget = Vector3(0.f, 0.f, 0.f);
 	cameraUp = Vector3(0.f, 1.f, 0.f);
 	cameraMovement = Vector3(0,0,0);
-	cameraTargetMovement = Vector3(0, 0, 0);
 	fov = 1.f;
 	zNear = 0.1f;
 	zFar = 100.f;
