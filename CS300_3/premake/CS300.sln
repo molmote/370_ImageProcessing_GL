@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment2", "projects\Assignment2.vcxproj", "{BF51AB14-0E62-3D41-B16C-4A51057A9111}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assignment2", "projects\Assignment2.vcxproj", "{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,12 +10,12 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BF51AB14-0E62-3D41-B16C-4A51057A9111}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BF51AB14-0E62-3D41-B16C-4A51057A9111}.Debug|Win32.Build.0 = Debug|Win32
-		{BF51AB14-0E62-3D41-B16C-4A51057A9111}.ReleaseSymbols|Win32.ActiveCfg = ReleaseSymbols|Win32
-		{BF51AB14-0E62-3D41-B16C-4A51057A9111}.ReleaseSymbols|Win32.Build.0 = ReleaseSymbols|Win32
-		{BF51AB14-0E62-3D41-B16C-4A51057A9111}.Release|Win32.ActiveCfg = Release|Win32
-		{BF51AB14-0E62-3D41-B16C-4A51057A9111}.Release|Win32.Build.0 = Release|Win32
+		{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}.Debug|Win32.Build.0 = Debug|Win32
+		{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}.ReleaseSymbols|Win32.ActiveCfg = ReleaseSymbols|Win32
+		{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}.ReleaseSymbols|Win32.Build.0 = ReleaseSymbols|Win32
+		{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}.Release|Win32.ActiveCfg = Release|Win32
+		{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

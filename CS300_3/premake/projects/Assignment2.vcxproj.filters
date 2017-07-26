@@ -2,28 +2,28 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="inc">
-      <UniqueIdentifier>{9D21D16A-BF47-0E4C-B4C0-FD186D9702E1}</UniqueIdentifier>
+      <UniqueIdentifier>{4F6A1E0A-64E6-E343-9694-BD5E78928D39}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\framework">
-      <UniqueIdentifier>{842E9CE9-2922-F04C-B84B-BDFE1E76927D}</UniqueIdentifier>
+      <UniqueIdentifier>{3AE58665-4E55-FA4A-B168-0FBDCD84EAF1}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\graphics">
-      <UniqueIdentifier>{5C4B9411-4BF9-C442-A4C8-55D97BD0834C}</UniqueIdentifier>
+      <UniqueIdentifier>{29888C40-131D-1A47-99BC-5A3E0254A0A4}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\math">
-      <UniqueIdentifier>{8BE23973-AF69-5D4A-A2CB-FCD90CF26EDF}</UniqueIdentifier>
+      <UniqueIdentifier>{1E130C1A-84F7-0F40-83E2-B6E26A87DC15}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
-      <UniqueIdentifier>{4BBA3151-B738-9440-946C-E0B84E99C16E}</UniqueIdentifier>
+      <UniqueIdentifier>{04E34D47-5A8B-B24F-969B-16362F7E73A0}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\framework">
-      <UniqueIdentifier>{7F64AE02-B4F2-994F-9ABF-75B895CFD8F7}</UniqueIdentifier>
+      <UniqueIdentifier>{97D2FBF2-0CEF-FF44-BE6B-8D4969B898AB}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\graphics">
-      <UniqueIdentifier>{7B292525-729D-0C4E-88EB-261A3A5AEFF5}</UniqueIdentifier>
+      <UniqueIdentifier>{187336EA-0D97-6E44-B4E9-CA2772655C54}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\math">
-      <UniqueIdentifier>{38F99744-7920-CE42-BCA4-ED5460797569}</UniqueIdentifier>
+      <UniqueIdentifier>{AFA35A9D-0C1D-CA46-B715-59B2956BF0BE}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -15,10 +15,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BF51AB14-0E62-3D41-B16C-4A51057A9111}</ProjectGuid>
+    <ProjectGuid>{A43AC43E-7E8E-DE47-BE91-F0AB5C8781E6}</ProjectGuid>
     <RootNamespace>Assignment2</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>Assignment3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -77,7 +76,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;ASSET_PATH=&quot;../../assets/&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -89,7 +88,7 @@
       <ProgramDataBaseFileName>$(OutDir)assignment2.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>_DEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;ASSET_PATH=&quot;../../assets/&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
@@ -101,15 +100,14 @@
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\debug\
-copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\debug\</Command>
+      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\debug\&#x0D;&#x0A;copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\debug\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseSymbols|Win32'">
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH=&quot;../../assets/&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -121,7 +119,7 @@ copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\debug\</Command>
       <ProgramDataBaseFileName>$(OutDir)assignment2.pdb</ProgramDataBaseFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH=&quot;../../assets/&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
@@ -136,15 +134,14 @@ copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\debug\</Command>
       <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\release\
-copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
+      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\release\&#x0D;&#x0A;copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH=&quot;../../assets/&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -152,11 +149,10 @@ copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompiled.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
+      <DebugInformationFormat></DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>NDEBUG;ASSET_PATH="../../assets/";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;ASSET_PATH=&quot;../../assets/&quot;;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\..\inc;..\..\dep;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
@@ -171,8 +167,7 @@ copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
       <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
-      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\release\
-copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
+      <Command>copy ..\..\dep\GLEW\glew32.dll ..\..\bin\release\&#x0D;&#x0A;copy ..\..\dep\FreeGLUT\freeglut.dll ..\..\bin\release\</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

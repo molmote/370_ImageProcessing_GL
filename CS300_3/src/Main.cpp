@@ -13,6 +13,10 @@
 #include "graphics/Light.h"
 #include "graphics/Color.h"
 #include "math/Math.h"
+//#include "math\Vector3.h"
+
+std::vector<float> RecordTime;
+std::vector<int> RecordDirction;
 
 static void Initialize(Application *application, void *udata);
 static void Update(Application *application, void *udata);
@@ -83,9 +87,17 @@ static std::unique_ptr<TextureManager> textureManager;
 static RenderObject renderObj;
 static RenderObject plane;
 
+static float timer = 0;
+
 static Vector3 cameraEye;
 static Vector3 cameraTarget;
 static Vector3 cameraUp;
+static Vector3 cameraMovement;
+static Vector3 cameraTargetMovement;
+static Vector3 RecordStartPos;
+static bool ScreenShot = false;
+static bool bCameraRecord= false;
+static bool bPlayRecord = false;
 static float fov;
 static float zNear;
 static float zFar;
@@ -113,7 +125,6 @@ static std::string textureFileDiffuse = "metal_roof_diff_512x512.tga";
 static int activeLightCount = 1;
 static const int maxLightCount = 8;
 static Light lights[maxLightCount];	
-
 // static lights in the scene
 // TODO(student): create a second light, perhaps something generic to help
 // prepare for assignment 2 (2 lights supported for assignment 1,
@@ -450,6 +461,80 @@ enum flag
 	HalfTone = 256,
 	WaterColor = 512,
 };
+void TakeScreenShot(Application *application)
+{
+	BITMAPFILEHEADER bf;
+	BITMAPINFOHEADER bi;
+
+	unsigned char *image = (unsigned char*)malloc(sizeof(unsigned char)*application->GetWindowWidth()*application->GetWindowHeight() * 3);
+	FILE *file = fopen("capture.bmp", "wb");
+
+	if (image != NULL)
+	{
+		if (file != NULL)
+		{
+			glReadPixels(0, 0, application->GetWindowWidth(), application->GetWindowHeight(), GL_BGR_EXT, GL_UNSIGNED_BYTE, image);
+
+			memset(&bf, 0, sizeof(bf));
+			memset(&bi, 0, sizeof(bi));
+
+			bf.bfType = 'MB';
+			bf.bfSize = sizeof(bf) + sizeof(bi) + application->GetWindowWidth()*application->GetWindowHeight() * 3;
+			bf.bfOffBits = sizeof(bf) + sizeof(bi);
+			bi.biSize = sizeof(bi);
+			bi.biWidth = application->GetWindowWidth();
+			bi.biHeight = application->GetWindowHeight();
+			bi.biPlanes = 1;
+			bi.biBitCount = 24;
+			bi.biSizeImage = application->GetWindowWidth()*application->GetWindowHeight() * 3;
+
+			fwrite(&bf, sizeof(bf), 1, file);
+			fwrite(&bi, sizeof(bi), 1, file);
+			fwrite(image, sizeof(unsigned char), application->GetWindowHeight()*application->GetWindowWidth() * 3, file);
+
+			fclose(file);
+		}
+		free(image);
+	}
+}
+void PlayCameraRecord(f32 time)
+{
+	static float RecordTimer = 0;
+	switch (RecordDirction.at(0))
+	{
+	case 0:
+		cameraMovement = Vector3(0.f, 0.f, 0.5f);
+		break;
+	case 1:
+		cameraMovement = Vector3(0.5f, 0.f, 0.0f);
+		break;
+	case 2:
+		cameraMovement = Vector3(0.f, 0.f, -0.5f);
+		break;
+	case 3:
+		cameraMovement = Vector3(-0.5f, 0.f, 0.0f);
+		break;
+	}
+	cameraEye += cameraMovement*time;
+	RecordTimer += time;
+	if (RecordTimer >= RecordTime.at(0))
+	{
+		if(!RecordTime.empty());
+		RecordTime.front() = std::move(RecordTime.back());
+		RecordTime.pop_back();
+		
+		if (!RecordDirction.empty());
+		RecordDirction.front() = std::move(RecordDirction.back());
+		RecordDirction.pop_back();
+		RecordTimer = 0;
+	}
+	if (RecordTime.size() == 0)
+	{
+		bPlayRecord = false;
+		cameraMovement = Vector3(0.f, 0.f, 0.0f);
+	}
+		
+}
 
 int shaderflag = 0;
 void getKeyInput(unsigned char key, int xmouse, int ymouse)
@@ -507,6 +592,76 @@ void getKeyInput(unsigned char key, int xmouse, int ymouse)
 		(shaderflag & flag::HalfTone) != flag::HalfTone ?
 			shaderflag += flag::HalfTone : shaderflag -= flag::HalfTone;
 	}
+	if (key == 'i')
+	{//left
+		if (bCameraRecord)
+		{
+			RecordTime.push_back(timer);
+			RecordDirction.push_back(0);
+		}
+		timer = 0;
+		cameraMovement = Vector3(0.f, 0.f, 0.5f);
+	}
+	if (key == 'j')
+	{//forword
+		if (bCameraRecord)
+		{
+			RecordTime.push_back(timer);
+			RecordDirction.push_back(1);
+		}
+		timer = 0;
+		cameraMovement = Vector3(0.5f, 0.f, 0.0f);
+		//cameraTargetMovement = Vector3(0.5f, 0.f, 0.0f);
+	}
+	if (key == 'k')
+	{//backword
+		if (bCameraRecord)
+		{
+			RecordTime.push_back(timer);
+			RecordDirction.push_back(2);
+		}
+		timer = 0;
+		cameraMovement = Vector3(0.f, 0.f, -0.5f);
+	}
+	if (key == 'l')
+	{//right
+		if (bCameraRecord)
+		{
+
+			RecordTime.push_back(timer);
+			RecordDirction.push_back(3);
+		}
+		timer = 0;
+		cameraMovement = Vector3(-0.5f, 0.f, 0.0f);
+		//cameraTargetMovement = Vector3(-0.5f, 0.f, 0.0f);
+	}
+	if (key == ' ')
+	{// stop camera movement with stop record if it plays
+		cameraMovement = Vector3(0.f, 0.f, 0.0f);
+//		cameraTargetMovement = Vector3(0.f, 0.f, 0.0f);
+		bCameraRecord = false;
+		timer = 0;
+	}
+	if (key == 'p')
+	{// take screenshot
+		ScreenShot = true;
+	}
+	if (key == '1')
+	{// record Camera movement
+		timer = 0;
+		bCameraRecord = true;
+		RecordStartPos = cameraEye;
+	}
+	if (key == '2')
+	{// play Carmera record
+		bCameraRecord = false;
+		timer = 0;
+	//	ScreenShot = true;
+	//	();
+		bPlayRecord = true;
+		cameraEye = RecordStartPos;
+	}
+
 
 	glutPostRedisplay(); //request display() call ASAP
 }
@@ -532,6 +687,8 @@ void Initialize(Application *application, void *udata)
 	cameraEye = Vector3(0.f, 0.f, -2.f);
 	cameraTarget = Vector3(0.f, 0.f, 0.f);
 	cameraUp = Vector3(0.f, 1.f, 0.f);
+	cameraMovement = Vector3(0,0,0);
+	cameraTargetMovement = Vector3(0, 0, 0);
 	fov = 1.f;
 	zNear = 0.1f;
 	zFar = 100.f;
@@ -869,6 +1026,15 @@ void RenderLights(Application* application)
 
 void UpdateCamera(float time)
 {
+//	
+//	if (timer < 0.5f)
+//	{
+	cameraEye += cameraMovement*time;
+//	cameraTarget += cameraTargetMovement*time;
+	if(bCameraRecord)
+		timer += time;
+//	}
+
 	if (!rotateCamera)
 		return;
 
@@ -881,6 +1047,7 @@ void UpdateCamera(float time)
 	cameraEye.x = renderObj.pos.x + cameraRotateRadius * cosf(cameraRotateAngleRad);
 	cameraEye.z = renderObj.pos.z + cameraRotateRadius * sinf(cameraRotateAngleRad);
 	cameraEye.y = renderObj.pos.y + 4 * sinf(cameraRotateAngleRad);
+
 }
 
 void Update(Application *application, void *udata)
@@ -901,7 +1068,18 @@ void Update(Application *application, void *udata)
 
 	RenderLights(application);
 
+	if (ScreenShot == true)
+	{
+		TakeScreenShot(application);
+		ScreenShot = false;
+	}
+	if (bPlayRecord)
+		PlayCameraRecord(dt);
 	// done creating ImGui components
+}
+void GetCameraMovement(int key)
+{
+
 }
 
 
