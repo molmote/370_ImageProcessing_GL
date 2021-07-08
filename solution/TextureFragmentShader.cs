@@ -95,6 +95,162 @@ vec4 Blur(int size)
     return avgValue / coefficientSum;
 }
 
+float MYMIN(float x, float y, float z)
+{
+    if (x < y)
+    {
+        if (x < z)
+        {
+            return x;
+        }
+        if (x >= z)
+        {
+            return z;
+        }
+    }
+    if (x >= y)
+    {
+        if (y < z)
+        {
+            return y;
+        }
+        if (y >= z)
+        {
+            return z;
+        }
+    }
+    return x;
+}
+
+float MYMAX(float x, float y, float z)
+{
+    if (x > y)
+    {
+        if (x > z)
+        {
+            return x;
+        }
+        if (x <= z)
+        {
+            return z;
+        }
+    }
+    if (x <= y)
+    {
+        if (y > z)
+        {
+            return y;
+        }
+        if (y <= z)
+        {
+            return z;
+        }
+    }
+    return x;
+}
+//H: 0-360
+//S: 0-1
+//V: 0-1
+vec3 RGBtoHSV(vec3 RGB)
+{
+  float min, max, delta;
+  vec3 HSV = vec3(0);
+  min = MYMIN(RGB.x, RGB.y, RGB.z);
+  max = MYMAX(RGB.x, RGB.y, RGB.z);
+  HSV.z = max;				// V
+  delta = max - min;
+  if (max > 0)
+    HSV.y = delta / max;		// S
+  if (max <= 0)
+  {
+    HSV.y = 0; //S
+    HSV.x = 0; //H
+    return HSV;
+  }
+  if (RGB.x == max) //Red highest
+    HSV.x = (RGB.y - RGB.z) / delta;
+  else if (RGB.y == max) //Green highest
+    HSV.x = 2 + (RGB.z - RGB.x) / delta;
+  else //Blue highest
+    HSV.x = 4 + (RGB.x - RGB.y) / delta;
+  HSV.x *= 60;				// Convert hue into degrees
+  if (HSV.x < 0)
+    HSV.x += 360;
+  return HSV;
+}
+
+vec3 HSVtoRGB(vec3 HSV)
+{
+  int i;
+  float f, p, q, t;
+  vec3 RGB = vec3(0);
+  
+  if (HSV.x < 0.0)
+    HSV.x += 360.0;
+  if (HSV.x >= 360.0)
+    HSV.x -= 359.0;
+  
+  if (HSV.y < 0.0)
+    HSV.y = 0.0;
+  if (HSV.y > 1.0)
+    HSV.y = 1.0;
+  
+  if (HSV.z < 0.0)
+    HSV.z = 0.0;
+  if (HSV.z > 1.0)
+    HSV.z = 1.0;
+  
+  if (HSV.y == 0)
+  {
+    // achromatic (grey)
+    RGB.x = RGB.y = RGB.z = HSV.z;
+    return RGB;
+  }
+  HSV.x /= 60;			// sector 0 to 5
+  i = int(HSV.x);
+  f = HSV.x - i;			// factorial part of h
+  p = HSV.z * (1 - HSV.y);
+  q = HSV.z * (1 - HSV.y * f);
+  t = HSV.z * (1 - HSV.y * (1 - f));
+  if (i == 0)
+  {
+    RGB.x = HSV.z;
+    RGB.y = t;
+    RGB.z = p;
+  }
+  else if (i == 1)
+  {
+    RGB.x = q;
+    RGB.y = HSV.z;
+    RGB.z = p;
+  }
+  else if (i == 2)
+  {
+    RGB.x = p;
+    RGB.y = HSV.z;
+    RGB.z = t;
+  }
+  else if (i == 3)
+  {
+    RGB.x = p;
+    RGB.y = q;
+    RGB.z = HSV.z;
+  }
+  else if (i == 4)
+  {
+    RGB.x = t;
+    RGB.y = p;
+    RGB.z = HSV.z;
+  }
+  else if (i == 5)
+  {
+    RGB.x = HSV.z;
+    RGB.y = p;
+    RGB.z = q;
+  }
+  return RGB;
+}
+
 float aastep(float threshold, float value)
 {
 #ifdef GL_OES_standard_derivatives
@@ -202,6 +358,10 @@ void main(){
     // RGB TO HSV
     if ((shaderflag & int(16)) == int(16))
     {
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      TempColor.x = 0.0;
+      TempColor = HSVtoRGB(TempColor);
+      FragmentColor = vec4(TempColor,1.0);
     }
 
 
@@ -210,15 +370,85 @@ void main(){
     {
     }
 
-    // Tone Change
+    // Sepia
+    // Sepia : Hue 0-40 from dankest to lightest
     if ((shaderflag & int(64)) == int(64))
     {
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      TempColor.z = TempColor.z - TempColor.y*0.25;
+      TempColor.x = TempColor.z*40.0;
+      TempColor = HSVtoRGB(TempColor);
+      FragmentColor = vec4(TempColor,1.0);
+    }
+    
+    // Greyscale
+    if ((shaderflag & int(128)) == int(128))
+    {
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      TempColor.z -= TempColor.y*0.5;
+      TempColor.y = 0.0;
+      TempColor = HSVtoRGB(TempColor);
+      FragmentColor = vec4(TempColor,1.0);
     }
 
     // Hue Change
     // for this one I Need another key for sepia / Black&White / Gray scale toggle
-    if ((shaderflag & int(128)) == int(128))
+    if ((shaderflag & int(512)) == int(512))
     {
+      float hue = 0.0;
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      hue = TempColor.x;
+      hue += 60.0;
+      TempColor = HSVtoRGB(vec3(hue,TempColor.yz));
+      FragmentColor = vec4(TempColor,1.0);
+    }
+    
+    // Hue Change
+    // for this one I Need another key for sepia / Black&White / Gray scale toggle
+    if ((shaderflag & int(1024)) == int(1024))
+    {
+      float hue = 0.0;
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      hue = TempColor.x;
+      hue += 120.0;
+      TempColor = HSVtoRGB(vec3(hue,TempColor.yz));
+      FragmentColor = vec4(TempColor,1.0);
+    }
+    
+    // Hue Change
+    // for this one I Need another key for sepia / Black&White / Gray scale toggle
+    if ((shaderflag & int(2048)) == int(2048))
+    {
+      float hue = 0.0;
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      hue = TempColor.x;
+      hue += 180.0;
+      TempColor = HSVtoRGB(vec3(hue,TempColor.yz));
+      FragmentColor = vec4(TempColor,1.0);
+    }
+    
+    // Hue Change
+    // for this one I Need another key for sepia / Black&White / Gray scale toggle
+    if ((shaderflag & int(4096)) == int(4096))
+    {
+      float hue = 0.0;
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      hue = TempColor.x;
+      hue += 240.0;
+      TempColor = HSVtoRGB(vec3(hue,TempColor.yz));
+      FragmentColor = vec4(TempColor,1.0);
+    }
+    
+    // Hue Change
+    // for this one I Need another key for sepia / Black&White / Gray scale toggle
+    if ((shaderflag & int(8192)) == int(8192))
+    {
+      float hue = 0.0;
+      vec3 TempColor = RGBtoHSV(FragmentColor.rgb);
+      hue = TempColor.x;
+      hue += 300.0;
+      TempColor = HSVtoRGB(vec3(hue,TempColor.yz));
+      FragmentColor = vec4(TempColor,1.0);
     }
 
     

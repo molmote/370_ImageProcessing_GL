@@ -1,0 +1,4 @@
+﻿  tutorial02.cpp
+c:\users\dingler\desktop\370\everybody'sone\370_imageprocessing_gl\tutorial02.cpp(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\dingler\desktop\370\everybody'sone\370_imageprocessing_gl\tutorial02.cpp(407): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+  RenderToTexture.vcxproj -> C:\Users\Dingler\Desktop\370\Everybody'sOne\370_ImageProcessing_GL\solution\Debug\RenderToTexture.exe

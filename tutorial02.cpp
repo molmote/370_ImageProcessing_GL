@@ -112,9 +112,14 @@ enum flag
 	AdditiveNoise = 8,
 	RGB2HSV = 16,
 	ScratchedFilm = 32,
-	ToneChange = 64,
-	HueChange = 128,
+	Sepia = 64,
+    Greyscale = 128,
 	HalfTone = 256,
+    HueChange1 = 512,
+    HueChange2 = 1024,
+    HueChange3 = 2048,
+    HueChange4 = 4096,
+    HueChange5 = 8192,
 };
 
 int shaderflag = 0;
@@ -170,14 +175,53 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS)
 	{
-		(shaderflag & flag::ToneChange) != flag::ToneChange ?
-			shaderflag += flag::ToneChange : shaderflag -= flag::ToneChange;
+        if ((shaderflag & (flag::Sepia | flag::Greyscale)) == flag::Sepia)
+        {
+            shaderflag &= ~(flag::Sepia | flag::Greyscale);
+        }
+        else if ((shaderflag & (flag::Sepia | flag::Greyscale)) == flag::Greyscale)
+        {
+            shaderflag &= ~flag::Greyscale;
+            shaderflag |= flag::Sepia;
+        }
+        else
+        {
+            shaderflag |= flag::Greyscale;
+        }
+
 	}
 
 	if (key == GLFW_KEY_F && action == GLFW_PRESS)
 	{
-		(shaderflag & flag::HueChange) != flag::HueChange ?
-			shaderflag += flag::HueChange : shaderflag -= flag::HueChange;
+        int chunk = (flag::HueChange1 | flag::HueChange2 | flag::HueChange3 | flag::HueChange4 | flag::HueChange5);
+        if ((shaderflag & chunk) == flag::HueChange1)
+        {
+            shaderflag ^= flag::HueChange1;
+            shaderflag ^= flag::HueChange2;
+        }
+        else if ((shaderflag & chunk) == flag::HueChange2)
+        {
+            shaderflag ^= flag::HueChange2;
+            shaderflag ^= flag::HueChange3;
+        }
+        else if ((shaderflag & chunk) == flag::HueChange3)
+        {
+            shaderflag ^= flag::HueChange3;
+            shaderflag ^= flag::HueChange4;
+        }
+        else if ((shaderflag & chunk) == flag::HueChange4)
+        {
+            shaderflag ^= flag::HueChange4;
+            shaderflag ^= flag::HueChange5;
+        }
+        else if ((shaderflag & chunk) == flag::HueChange5)
+        {
+            shaderflag ^= flag::HueChange5;
+        }
+        else
+        {
+            shaderflag ^= flag::HueChange1;
+        }
 	}
 
 	if (key == GLFW_KEY_Z && action == GLFW_PRESS)
